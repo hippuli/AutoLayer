@@ -1,0 +1,28 @@
+lightweight tag 5c972b1b9a314a7ed4752bbd4780af0cf1a39285 1.6.8-release
+Author:	GitHub <noreply@github.com>
+Date:	Fri Oct 24 18:54:39 2025 +0200
+
+commit 121f10a4c5c1721db0e8bd15b044294ef2367aaf
+Author: Kenny <46543251+Kenny417@users.noreply.github.com>
+Date:   Wed Oct 22 15:35:32 2025 +0000
+
+    toc interface version bump
+
+commit 121f10a4c5c1721db0e8bd15b044294ef2367aaf
+Author: Kenny <46543251+Kenny417@users.noreply.github.com>
+Date:   Wed Oct 22 15:35:32 2025 +0000
+
+    toc interface version bump
+
+commit 1b30b1a531f01ad452d6b97f1bbbf468b9c4f6eb
+Author: Kenny <46543251+Kenny417@users.noreply.github.com>
+Date:   Wed Oct 22 14:05:52 2025 +0000
+
+    check for existence of frame before checking the name
+
+commit bc3916543a7cf74af8a4b8a7efcf97efe5b02e09
+Author: Kenny <46543251+Kenny417@users.noreply.github.com>
+Date:   Tue Oct 21 23:07:41 2025 +0000
+
+    fix: use StaticPopup_ForEachShownDialog to iterate over open dialogs since STATICPOPUP_NUMDIALOGS was removed
+
