@@ -1,52 +1,48 @@
-lightweight tag ccdcaf4016e19bcab37cf851579d79f298e3c38d 1.7.5-release
+lightweight tag b03cc178d59c7c59300c4dce04a23d62a6bb2d53 1.7.6-release
 Author:	GitHub <noreply@github.com>
-Date:	Sun Feb 8 13:13:46 2026 +0100
+Date:	Tue Feb 17 19:16:13 2026 +0100
 
-commit d8851992778a3c4e1c358f6cca14e4ed85d2939a
+commit 92677c8a688380fc31a3c5acdfcca17752ae4ed4
+Author: Milestorme <44911744+milestorme@users.noreply.github.com>
+Date:   Tue Feb 17 10:30:26 2026 +0800
+
+    Update layering.lua
+    
+    fix for https://github.com/iraizo/AutoLayer/issues/100
+
+commit 92677c8a688380fc31a3c5acdfcca17752ae4ed4
+Author: Milestorme <44911744+milestorme@users.noreply.github.com>
+Date:   Tue Feb 17 10:30:26 2026 +0800
+
+    Update layering.lua
+    
+    fix for https://github.com/iraizo/AutoLayer/issues/100
+
+commit 92677c8a688380fc31a3c5acdfcca17752ae4ed4
+Author: Milestorme <44911744+milestorme@users.noreply.github.com>
+Date:   Tue Feb 17 10:30:26 2026 +0800
+
+    Update layering.lua
+    
+    fix for https://github.com/iraizo/AutoLayer/issues/100
+
+commit 92677c8a688380fc31a3c5acdfcca17752ae4ed4
+Author: Milestorme <44911744+milestorme@users.noreply.github.com>
+Date:   Tue Feb 17 10:30:26 2026 +0800
+
+    Update layering.lua
+    
+    fix for https://github.com/iraizo/AutoLayer/issues/100
+
+commit ddb5a9fa0867adaf6d4e788d91e3f484c39bbf80
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Feb 6 16:47:51 2026 +0100
+Date:   Sat Feb 14 15:36:29 2026 +0100
 
-    Fix auto-kick action
+    Bump version in toc file
 
-commit d8851992778a3c4e1c358f6cca14e4ed85d2939a
+commit 4381541e1cc344c0b92f7f1f5fadabfe8619468d
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Feb 6 16:47:51 2026 +0100
+Date:   Sat Feb 14 15:27:21 2026 +0100
 
-    Fix auto-kick action
-
-commit d8851992778a3c4e1c358f6cca14e4ed85d2939a
-Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Feb 6 16:47:51 2026 +0100
-
-    Fix auto-kick action
-
-commit d8851992778a3c4e1c358f6cca14e4ed85d2939a
-Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Feb 6 16:47:51 2026 +0100
-
-    Fix auto-kick action
-
-commit d8851992778a3c4e1c358f6cca14e4ed85d2939a
-Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Feb 6 16:47:51 2026 +0100
-
-    Fix auto-kick action
-
-commit e9a248664d716c0386e9aaf20e057407424be0e0
-Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Feb 6 16:32:06 2026 +0100
-
-    Add color codes to threshold options
-
-commit 7011ffd7e70f4d8c95b801fc3bdc90f61da52d49
-Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Feb 6 15:04:53 2026 +0100
-
-    Only change loot settings when group leader
-
-commit 33bd7b54051fefc53408c89c6da453b0faad21f3
-Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Feb 6 13:34:20 2026 +0100
-
-    Allow player to override default loot method and threshold
+    Unmute sounds when disabling AutoLayer
 
