@@ -1,48 +1,28 @@
-lightweight tag b03cc178d59c7c59300c4dce04a23d62a6bb2d53 1.7.6-release
+lightweight tag ed19139b05504a3fd4a2ae4d0b220de2ecc7b594 1.7.7-release
 Author:	GitHub <noreply@github.com>
-Date:	Tue Feb 17 19:16:13 2026 +0100
+Date:	Wed Feb 18 19:51:28 2026 +0100
 
-commit 92677c8a688380fc31a3c5acdfcca17752ae4ed4
+commit 36ab47fabf747c9a5ba93cadb896a386042b9c9d
 Author: Milestorme <44911744+milestorme@users.noreply.github.com>
-Date:   Tue Feb 17 10:30:26 2026 +0800
+Date:   Wed Feb 18 21:11:22 2026 +0800
 
-    Update layering.lua
+    Add ignore prefix's
     
-    fix for https://github.com/iraizo/AutoLayer/issues/100
+    Adds new profile field: ignorePrefixes
+    Adds options UI field
+    Adds parsing logic
+    Adds color-safe prefix filtering
+    Prevents NWB from triggering AutoLayer by default
 
-commit 92677c8a688380fc31a3c5acdfcca17752ae4ed4
+commit 36ab47fabf747c9a5ba93cadb896a386042b9c9d
 Author: Milestorme <44911744+milestorme@users.noreply.github.com>
-Date:   Tue Feb 17 10:30:26 2026 +0800
+Date:   Wed Feb 18 21:11:22 2026 +0800
 
-    Update layering.lua
+    Add ignore prefix's
     
-    fix for https://github.com/iraizo/AutoLayer/issues/100
-
-commit 92677c8a688380fc31a3c5acdfcca17752ae4ed4
-Author: Milestorme <44911744+milestorme@users.noreply.github.com>
-Date:   Tue Feb 17 10:30:26 2026 +0800
-
-    Update layering.lua
-    
-    fix for https://github.com/iraizo/AutoLayer/issues/100
-
-commit 92677c8a688380fc31a3c5acdfcca17752ae4ed4
-Author: Milestorme <44911744+milestorme@users.noreply.github.com>
-Date:   Tue Feb 17 10:30:26 2026 +0800
-
-    Update layering.lua
-    
-    fix for https://github.com/iraizo/AutoLayer/issues/100
-
-commit ddb5a9fa0867adaf6d4e788d91e3f484c39bbf80
-Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Sat Feb 14 15:36:29 2026 +0100
-
-    Bump version in toc file
-
-commit 4381541e1cc344c0b92f7f1f5fadabfe8619468d
-Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Sat Feb 14 15:27:21 2026 +0100
-
-    Unmute sounds when disabling AutoLayer
+    Adds new profile field: ignorePrefixes
+    Adds options UI field
+    Adds parsing logic
+    Adds color-safe prefix filtering
+    Prevents NWB from triggering AutoLayer by default
 
