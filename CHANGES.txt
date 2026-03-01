@@ -1,28 +1,16 @@
-lightweight tag ed19139b05504a3fd4a2ae4d0b220de2ecc7b594 1.7.7-release
+lightweight tag 3f5e959032bd2b33cbf93e19f7948f9e5a8637ea 1.7.8-release
 Author:	GitHub <noreply@github.com>
-Date:	Wed Feb 18 19:51:28 2026 +0100
+Date:	Fri Feb 27 11:51:14 2026 +0100
 
-commit 36ab47fabf747c9a5ba93cadb896a386042b9c9d
-Author: Milestorme <44911744+milestorme@users.noreply.github.com>
-Date:   Wed Feb 18 21:11:22 2026 +0800
+commit 4344b13e4ab69f4a80087c86014433cbd8e3cb25
+Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
+Date:   Fri Feb 27 01:13:30 2026 +0100
 
-    Add ignore prefix's
-    
-    Adds new profile field: ignorePrefixes
-    Adds options UI field
-    Adds parsing logic
-    Adds color-safe prefix filtering
-    Prevents NWB from triggering AutoLayer by default
+    Strict trigger matching
 
-commit 36ab47fabf747c9a5ba93cadb896a386042b9c9d
-Author: Milestorme <44911744+milestorme@users.noreply.github.com>
-Date:   Wed Feb 18 21:11:22 2026 +0800
+commit 4344b13e4ab69f4a80087c86014433cbd8e3cb25
+Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
+Date:   Fri Feb 27 01:13:30 2026 +0100
 
-    Add ignore prefix's
-    
-    Adds new profile field: ignorePrefixes
-    Adds options UI field
-    Adds parsing logic
-    Adds color-safe prefix filtering
-    Prevents NWB from triggering AutoLayer by default
+    Strict trigger matching
 
