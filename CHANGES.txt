@@ -1,16 +1,16 @@
-lightweight tag 3f5e959032bd2b33cbf93e19f7948f9e5a8637ea 1.7.8-release
+lightweight tag 7c9ceb3906886f6f092fc1d6cd13d1bbd62f22f1 1.7.9-release
 Author:	GitHub <noreply@github.com>
-Date:	Fri Feb 27 11:51:14 2026 +0100
+Date:	Sun Mar 1 17:29:05 2026 +0100
 
-commit 4344b13e4ab69f4a80087c86014433cbd8e3cb25
+commit fb5e322aa032e9112355897ff31816bfc525baf9
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Feb 27 01:13:30 2026 +0100
+Date:   Sat Feb 28 03:00:39 2026 +0100
 
-    Strict trigger matching
+    Add any layer request, avoid spamming
 
-commit 4344b13e4ab69f4a80087c86014433cbd8e3cb25
+commit fb5e322aa032e9112355897ff31816bfc525baf9
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Feb 27 01:13:30 2026 +0100
+Date:   Sat Feb 28 03:00:39 2026 +0100
 
-    Strict trigger matching
+    Add any layer request, avoid spamming
 
