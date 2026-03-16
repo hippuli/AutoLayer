@@ -1,16 +1,56 @@
-lightweight tag 7c9ceb3906886f6f092fc1d6cd13d1bbd62f22f1 1.7.9-release
+lightweight tag 8e88ec2a1a1b0f2847df86d6dc0e94fea1cd62a4 1.8.0-release
 Author:	GitHub <noreply@github.com>
-Date:	Sun Mar 1 17:29:05 2026 +0100
+Date:	Sat Mar 14 16:47:24 2026 +0100
 
-commit fb5e322aa032e9112355897ff31816bfc525baf9
+commit 608f4a1a090983c8396c0de27c6c0a105e8c1900
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Sat Feb 28 03:00:39 2026 +0100
+Date:   Wed Mar 4 23:33:40 2026 +0100
 
-    Add any layer request, avoid spamming
+    Bump minor version
 
-commit fb5e322aa032e9112355897ff31816bfc525baf9
+commit 608f4a1a090983c8396c0de27c6c0a105e8c1900
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Sat Feb 28 03:00:39 2026 +0100
+Date:   Wed Mar 4 23:33:40 2026 +0100
 
-    Add any layer request, avoid spamming
+    Bump minor version
+
+commit 608f4a1a090983c8396c0de27c6c0a105e8c1900
+Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
+Date:   Wed Mar 4 23:33:40 2026 +0100
+
+    Bump minor version
+
+commit 608f4a1a090983c8396c0de27c6c0a105e8c1900
+Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
+Date:   Wed Mar 4 23:33:40 2026 +0100
+
+    Bump minor version
+
+commit 8975ea04e2205008477fe20c8fe59645a19d500e
+Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
+Date:   Wed Mar 4 22:56:44 2026 +0100
+
+    Add cooldown note to Hopper GUI
+
+commit 7e284ca1d857a68def4b6e9d3a9eb453fc4a970b
+Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
+Date:   Wed Mar 4 22:22:05 2026 +0100
+
+    Register options panel with Blizzard UI
+
+commit 61db4628b265002c45f85809b8eda02ef591d185
+Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
+Date:   Sun Mar 1 21:32:53 2026 +0100
+
+    Update README
+    
+    Update README with the latest functionality
+
+commit 61db4628b265002c45f85809b8eda02ef591d185
+Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
+Date:   Sun Mar 1 21:32:53 2026 +0100
+
+    Update README
+    
+    Update README with the latest functionality
 

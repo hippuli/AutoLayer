@@ -10,7 +10,14 @@ local is_closed = true
 local send
 
 function AutoLayer:SendLayerRequest()
-	local res = "inv layer "
+	local res = ""
+
+	if self.db.profile.layerSegments and addonTable.currentLayerSegment then
+		self:DebugPrint("Using layer segment:", addonTable.currentLayerSegment)
+		res = "<" .. addonTable.currentLayerSegment .. "> "
+	end
+
+	res = res .. "inv layer "
 	res = res .. table.concat(selected_layers, ",")
 	LeaveParty()
 	table.insert(addonTable.send_queue, res)
@@ -222,4 +229,10 @@ function AutoLayer:HopGUI()
 		send:SetText("Request Any Layer")
 	end
 	frame:AddChild(send)
+
+	-- Add a label explaining there is a cooldown on layering
+	local cooldownLabel = AceGUI:Create("Label")
+	cooldownLabel:SetText("|cffff0000Note:|r Blizzard enforces an increasing cooldown on layering.\nThe more you attempt to layer, the longer it takes each time.|r")
+	cooldownLabel:SetFullWidth(true)
+	frame:AddChild(cooldownLabel)
 end
