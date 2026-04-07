@@ -1,16 +1,22 @@
-lightweight tag 3838eed696ea5482f898b7cadb1ac36940e3a206 1.8.1-release
+lightweight tag 12a2ddf36b7800fb281230ba166776799fd089f4 1.8.2-release
 Author:	GitHub <noreply@github.com>
-Date:	Sun Mar 29 13:34:51 2026 +0200
+Date:	Sun Apr 5 16:28:09 2026 +0200
 
-commit 33c5376c795ba525aabea953f75751cf9fbd7ecc
+commit c81e287415ae2485b617f671f463200b43b96e4b
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Sat Mar 28 02:46:11 2026 +0100
+Date:   Fri Apr 3 22:06:48 2026 +0200
 
-    Fix arena layer segment error
+    Bump version in TOC file
 
-commit 33c5376c795ba525aabea953f75751cf9fbd7ecc
+commit c81e287415ae2485b617f671f463200b43b96e4b
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Sat Mar 28 02:46:11 2026 +0100
+Date:   Fri Apr 3 22:06:48 2026 +0200
 
-    Fix arena layer segment error
+    Bump version in TOC file
+
+commit 816edde0b1492deb9f230be1c23bd2f6a00fcac3
+Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
+Date:   Fri Apr 3 21:55:28 2026 +0200
+
+    Fix localization issue and PVP Barracks
 
