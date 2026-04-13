@@ -1,22 +1,22 @@
-lightweight tag 12a2ddf36b7800fb281230ba166776799fd089f4 1.8.2-release
+lightweight tag 0a61933a4daff4be93dd4f4a1b8a54fcc5e8b791 1.8.3-release
 Author:	GitHub <noreply@github.com>
-Date:	Sun Apr 5 16:28:09 2026 +0200
+Date:	Sun Apr 12 12:31:44 2026 +0200
 
-commit c81e287415ae2485b617f671f463200b43b96e4b
+commit d8c59e58edf06b944840b5e701f168989dca66fd
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Apr 3 22:06:48 2026 +0200
+Date:   Sat Apr 11 15:05:44 2026 +0200
 
-    Bump version in TOC file
+    Add extra check before debug print
 
-commit c81e287415ae2485b617f671f463200b43b96e4b
+commit d8c59e58edf06b944840b5e701f168989dca66fd
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Apr 3 22:06:48 2026 +0200
+Date:   Sat Apr 11 15:05:44 2026 +0200
 
-    Bump version in TOC file
+    Add extra check before debug print
 
-commit 816edde0b1492deb9f230be1c23bd2f6a00fcac3
+commit 475c656af76876778dc5520e10f733598dac7a29
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Apr 3 21:55:28 2026 +0200
+Date:   Sat Apr 11 14:26:03 2026 +0200
 
-    Fix localization issue and PVP Barracks
+    Add layer segment mismatch warning
 
