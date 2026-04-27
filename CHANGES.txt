@@ -1,22 +1,16 @@
-lightweight tag 0a61933a4daff4be93dd4f4a1b8a54fcc5e8b791 1.8.3-release
+lightweight tag 00c1fb974453313b42ac3c85f42b49206f3c7180 1.8.4-release
 Author:	GitHub <noreply@github.com>
-Date:	Sun Apr 12 12:31:44 2026 +0200
+Date:	Sun Apr 26 13:03:32 2026 +0200
 
-commit d8c59e58edf06b944840b5e701f168989dca66fd
+commit ea942be7295fa6d26d083564fc78106884ca1932
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Sat Apr 11 15:05:44 2026 +0200
+Date:   Fri Apr 24 22:10:04 2026 +0200
 
-    Add extra check before debug print
+    Add layer segment overrides
 
-commit d8c59e58edf06b944840b5e701f168989dca66fd
+commit ea942be7295fa6d26d083564fc78106884ca1932
 Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Sat Apr 11 15:05:44 2026 +0200
+Date:   Fri Apr 24 22:10:04 2026 +0200
 
-    Add extra check before debug print
-
-commit 475c656af76876778dc5520e10f733598dac7a29
-Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Sat Apr 11 14:26:03 2026 +0200
-
-    Add layer segment mismatch warning
+    Add layer segment overrides
 
