@@ -1,16 +1,10 @@
-lightweight tag 00c1fb974453313b42ac3c85f42b49206f3c7180 1.8.4-release
-Author:	GitHub <noreply@github.com>
-Date:	Sun Apr 26 13:03:32 2026 +0200
+lightweight tag cd05ce925adeced146a26e30d0c0987970ababdb 1.9.0-release
+Author:	raizo <admin@raizo.dev>
+Date:	Fri May 15 20:01:47 2026 +0200
 
-commit ea942be7295fa6d26d083564fc78106884ca1932
-Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Apr 24 22:10:04 2026 +0200
+commit cd05ce925adeced146a26e30d0c0987970ababdb
+Author: raizo <admin@raizo.dev>
+Date:   Fri May 15 20:01:47 2026 +0200
 
-    Add layer segment overrides
-
-commit ea942be7295fa6d26d083564fc78106884ca1932
-Author: Jan Dorsman <160809113+jdorsman@users.noreply.github.com>
-Date:   Fri Apr 24 22:10:04 2026 +0200
-
-    Add layer segment overrides
+    Add autolayer status and stats commands
 
