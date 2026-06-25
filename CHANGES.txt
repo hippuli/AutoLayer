@@ -1,10 +1,10 @@
-lightweight tag cd05ce925adeced146a26e30d0c0987970ababdb 1.9.0-release
+lightweight tag a2ed436f4b17667d494551c11c691c6b291bddaa 1.9.1-release
 Author:	raizo <admin@raizo.dev>
-Date:	Fri May 15 20:01:47 2026 +0200
+Date:	Tue Jun 23 16:32:54 2026 +0200
 
-commit cd05ce925adeced146a26e30d0c0987970ababdb
+commit a2ed436f4b17667d494551c11c691c6b291bddaa
 Author: raizo <admin@raizo.dev>
-Date:   Fri May 15 20:01:47 2026 +0200
+Date:   Tue Jun 23 16:32:40 2026 +0200
 
-    Add autolayer status and stats commands
+    layering: clamp layer numbers to MAX_LAYER (20)
 
