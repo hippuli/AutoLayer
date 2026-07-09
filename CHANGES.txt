@@ -1,10 +1,10 @@
-lightweight tag a2ed436f4b17667d494551c11c691c6b291bddaa 1.9.1-release
+lightweight tag 4f4568f3f554b30777bcc456495bd2c197311388 1.9.3-release
 Author:	raizo <admin@raizo.dev>
-Date:	Tue Jun 23 16:32:54 2026 +0200
+Date:	Thu Jul 9 17:55:25 2026 +0200
 
-commit a2ed436f4b17667d494551c11c691c6b291bddaa
+commit 4f4568f3f554b30777bcc456495bd2c197311388
 Author: raizo <admin@raizo.dev>
-Date:   Tue Jun 23 16:32:40 2026 +0200
+Date:   Thu Jul 9 17:55:25 2026 +0200
 
-    layering: clamp layer numbers to MAX_LAYER (20)
+    chore: bump version
 
