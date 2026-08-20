@@ -1,6 +1,12 @@
-lightweight tag 4f4568f3f554b30777bcc456495bd2c197311388 1.9.3-release
+lightweight tag f17e23d0168f9c37e9205be39c3118306f246019 1.9.3-release
 Author:	raizo <admin@raizo.dev>
-Date:	Thu Jul 9 17:55:25 2026 +0200
+Date:	Sun Aug 16 15:56:18 2026 +0200
+
+commit f17e23d0168f9c37e9205be39c3118306f246019
+Author: raizo <admin@raizo.dev>
+Date:   Sun Aug 16 15:56:18 2026 +0200
+
+    fix: use C_PartyInfo.LeaveParty for patch 1.15.9 compatibility
 
 commit 4f4568f3f554b30777bcc456495bd2c197311388
 Author: raizo <admin@raizo.dev>
