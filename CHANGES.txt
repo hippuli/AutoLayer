@@ -1,16 +1,20 @@
-lightweight tag f17e23d0168f9c37e9205be39c3118306f246019 1.9.3-release
-Author:	raizo <admin@raizo.dev>
-Date:	Sun Aug 16 15:56:18 2026 +0200
+lightweight tag cc9075fbd6313092ecb47501772dc119a9fd141f 1.9.4-release
+Author:	GitHub <noreply@github.com>
+Date:	Fri Aug 21 14:37:30 2026 +0200
 
-commit f17e23d0168f9c37e9205be39c3118306f246019
-Author: raizo <admin@raizo.dev>
-Date:   Sun Aug 16 15:56:18 2026 +0200
+commit 390f191c5fc143d2271975fe3010eaf2396e349c
+Author: darkjacky <jackykoning@icloud.com>
+Date:   Fri Aug 21 01:20:33 2026 +0200
 
-    fix: use C_PartyInfo.LeaveParty for patch 1.15.9 compatibility
+    Fix LeaveParty for TBC classic
+    
+    C_PartyInfo.LeaveParty does not exist on TBC Classic Anniversary. This simply uses a lua check so it works on every client.
 
-commit 4f4568f3f554b30777bcc456495bd2c197311388
-Author: raizo <admin@raizo.dev>
-Date:   Thu Jul 9 17:55:25 2026 +0200
+commit 390f191c5fc143d2271975fe3010eaf2396e349c
+Author: darkjacky <jackykoning@icloud.com>
+Date:   Fri Aug 21 01:20:33 2026 +0200
 
-    chore: bump version
+    Fix LeaveParty for TBC classic
+    
+    C_PartyInfo.LeaveParty does not exist on TBC Classic Anniversary. This simply uses a lua check so it works on every client.
 
