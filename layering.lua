@@ -3,8 +3,14 @@ local CTL = _G.ChatThrottleLib
 
 local playersInvitedRecently = {}
 local pendingPlayerInvites = {}
+local groupInviteTimes = {}
 local recentLayerRequests = {}
 local kicked_player_queue = {}
+local queuedKickNames = {}
+local compatibilityNoticeExpiry = {}
+local pendingCompatibilityNotices = {}
+local nextCompatibilityNoticeToken = 0
+local zoneMismatchNoticeExpiry = {}
 local runtimeStats = {
 	matchedRequests = 0,
 	invitesSent = 0,
@@ -21,6 +27,38 @@ addonTable.activeLayerChannel = nil
 -- Channel list - will be populated after all addons load
 local LAYER_CHANNELS = {}
 
+if not C_Seasons then
+    C_Seasons = {}
+end
+if not C_Seasons.HasActiveSeason then
+    C_Seasons.HasActiveSeason = function()
+        return false
+    end
+end
+local UninviteUnit = (C_PartyInfo and C_PartyInfo.UninviteUnit) or _G.UninviteUnit
+
+-- ERR_RAID_MEMBER_ADDED_S is missing on some clients the addon supports; when absent, raid
+-- joins reuse the party join message. The pending compatibility notice is consumed on first
+-- match, so a shared string cannot deliver the notice twice.
+local ERR_RAID_MEMBER_ADDED = _G.ERR_RAID_MEMBER_ADDED_S or ERR_JOINED_GROUP_S
+
+local function getCurrentCalendarTime()
+    if C_DateAndTime and C_DateAndTime.GetCurrentCalendarTime then
+        return C_DateAndTime.GetCurrentCalendarTime()
+    elseif C_DateAndTime and C_DateAndTime.GetTodaysDate then
+        local today = C_DateAndTime.GetTodaysDate()
+        return {
+            monthDay = today.day,
+            month = today.month,
+            year = today.year,
+            weekday = today.weekDay,
+            hour = 0,
+            minute = 0,
+        }
+    end
+    error("AutoLayer tried to call a Blizzard API function that does not exist...", 2)
+end
+
 -- Generate dynamic channel names based on server date and realm name
 local function GenerateLayerChannels()
 	local channels = {}
@@ -28,7 +66,7 @@ local function GenerateLayerChannels()
 	-- Always include the static "layer" channel first as primary/fallback
 	table.insert(channels, "layer")
 
-	local t = C_DateAndTime.GetCurrentCalendarTime()
+    local t = getCurrentCalendarTime()
 	local realmName = GetRealmName() or "Unknown"
 
 	-- Need LibDeflate for hashing
@@ -178,6 +216,72 @@ end
 
 local function removeRealmName(name)
 	return ({ strsplit("-", name) })[1]
+end
+
+local function normalizeCharacterName(name)
+	local normalized = removeRealmName(name or "")
+	return string.lower(normalized)
+end
+
+local function queueCompatibilityNoticeForInvite(target)
+	local normalized = normalizeCharacterName(target)
+	if normalized ~= "" then
+		nextCompatibilityNoticeToken = nextCompatibilityNoticeToken + 1
+		local token = nextCompatibilityNoticeToken
+		pendingCompatibilityNotices[normalized] = token
+		C_Timer.After(180, function()
+			if pendingCompatibilityNotices[normalized] == token then
+				pendingCompatibilityNotices[normalized] = nil
+			end
+		end)
+	end
+end
+
+local function sendCompatibilityNoticeOnce(target)
+	local normalized = normalizeCharacterName(target)
+	if normalized == "" then
+		return
+	end
+
+	local currentTime = time()
+	if not compatibilityNoticeExpiry[normalized] or compatibilityNoticeExpiry[normalized] <= currentTime then
+		compatibilityNoticeExpiry[normalized] = currentTime + 300
+		AutoLayer:SendLayerCompatibilityWhisper(target)
+	end
+end
+
+--- Consumes the pending compatibility notice for the given character, if one was queued for
+--- their invite, and delivers it through sendCompatibilityNoticeOnce (which applies its own
+--- throttle). Shared by accepted party (ERR_JOINED_GROUP_S) and raid (ERR_RAID_MEMBER_ADDED)
+--- joins so the notice is delivered when either invite type is accepted.
+--- @param characterName string The character name as it appeared in the join system message.
+local function deliverPendingCompatibilityNotice(characterName)
+	local normalizedPlayerName = normalizeCharacterName(characterName)
+	local compatibilityNoticeToken = pendingCompatibilityNotices[normalizedPlayerName]
+	pendingCompatibilityNotices[normalizedPlayerName] = nil
+	if compatibilityNoticeToken then
+		sendCompatibilityNoticeOnce(characterName)
+	end
+end
+
+local function sendZoneMismatchNoticeOnce(target)
+	local normalized = normalizeCharacterName(target)
+	if normalized == "" then
+		return
+	end
+
+	local currentTime = time()
+	if not zoneMismatchNoticeExpiry[normalized] or zoneMismatchNoticeExpiry[normalized] <= currentTime then
+		zoneMismatchNoticeExpiry[normalized] = currentTime + 300
+		CTL:SendChatMessage(
+			"NORMAL",
+			target,
+			"[AutoLayer] Layer invites only work within the same zone; no invite was sent.",
+			"WHISPER",
+			nil,
+			target
+		)
+	end
 end
 
 local function stripColorCodes(msg)
@@ -344,13 +448,52 @@ C_Timer.After(0.1, function()
 	FixMisplacedChannels()
 end)
 
-function AutoLayer:FindOfflineMembersToKick()
-	for i = 1, GetNumGroupMembers() do
-		local name, _, _, _, _, _, _, online, _, _, _, _ = GetRaidRosterInfo(i)
+function AutoLayer:SelectKickCandidate()
+	local playerName = normalizeCharacterName(UnitName("player"))
+	local oldestName
+	local oldestTime
+	local oldestIndex
 
-		if online == false then
-			table.insert(kicked_player_queue, name)
+	for i = 1, GetNumGroupMembers() do
+		local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
+		local normalizedName = name and normalizeCharacterName(name)
+
+		if name and normalizedName ~= playerName then
+			if online == false then
+				return name
+			end
+
+			local inviteTime = groupInviteTimes[normalizedName]
+			if not oldestName
+				or (inviteTime and not oldestTime)
+				or (inviteTime and oldestTime and inviteTime < oldestTime)
+				or ((not inviteTime and not oldestTime) or (inviteTime and oldestTime and inviteTime == oldestTime))
+					and i < oldestIndex
+			then
+				oldestName = name
+				oldestTime = inviteTime
+				oldestIndex = i
+			end
 		end
+	end
+
+	return oldestName
+end
+
+local function queueKickCandidate(name)
+	local normalizedName = normalizeCharacterName(name)
+	if normalizedName == "" or queuedKickNames[normalizedName] then
+		return
+	end
+
+	queuedKickNames[normalizedName] = true
+	groupInviteTimes[normalizedName] = nil
+	table.insert(kicked_player_queue, name)
+end
+
+local function clearGroupInviteTimes()
+	for name in pairs(groupInviteTimes) do
+		groupInviteTimes[name] = nil
 	end
 end
 
@@ -388,21 +531,42 @@ function AutoLayer:ProcessMessage(
 		end
 	end
 
-	-- Check if the message has a layer segment prefix. If it does, it should match our layer segment.
-	local segmentPrefix = msg:match("^<(%w+)> ")
+	local bccMetadata
+	local bccRequiresCompatibilityHandling = false
+	local bccShouldNotifyCompatibility = false
 
-	-- Remove the matched prefix from msg, since it could inadvertently trigger things like blacklist or invert keywords
-	if segmentPrefix then
-		msg = msg:gsub("^<" .. segmentPrefix .. "> ", "")
-	end
+	if addonTable.flavor == "bcc" then
+		local bccBody
+		bccMetadata, bccBody = self:ParseLayerRequestHeader(msg)
+		if not bccMetadata then
+			bccRequiresCompatibilityHandling = true
+			local legacyPrefix = msg:match("^<(%w+)> ")
+			if legacyPrefix then
+				msg = msg:gsub("^<" .. legacyPrefix .. "> ", "")
+			end
+			bccShouldNotifyCompatibility = string.match(string.lower(msg), "^inv%s+layer%f[%W]") ~= nil
+		else
+			msg = bccBody
+			bccRequiresCompatibilityHandling = self:IsVersionOlder(bccMetadata.addonVersion, "1.9.5")
+			bccShouldNotifyCompatibility = bccRequiresCompatibilityHandling
+		end
+	else
+		-- Check if the message has a layer segment prefix. If it does, it should match our layer segment.
+		local segmentPrefix = msg:match("^<(%w+)> ")
 
-	if self.db.profile.layerSegments and addonTable.currentLayerSegment and segmentPrefix then
-		if segmentPrefix ~= addonTable.currentLayerSegment then
-			self:DebugPrint("Message has segment prefix " .. segmentPrefix .. " but we are in segment '" .. addonTable.currentLayerSegment .. "', ignoring")
-			return
+		-- Remove the matched prefix from msg, since it could inadvertently trigger things like blacklist or invert keywords
+		if segmentPrefix then
+			msg = msg:gsub("^<" .. segmentPrefix .. "> ", "")
 		end
 
-		self:DebugPrint("Message segment prefix " .. segmentPrefix .. " matches our segment")
+		if self.db.profile.layerSegments and addonTable.currentLayerSegment and segmentPrefix then
+			if segmentPrefix ~= addonTable.currentLayerSegment then
+				self:DebugPrint("Message has segment prefix " .. segmentPrefix .. " but we are in segment '" .. addonTable.currentLayerSegment .. "', ignoring")
+				return
+			end
+
+			self:DebugPrint("Message segment prefix " .. segmentPrefix .. " matches our segment")
+		end
 	end
 
 	local name_without_realm = removeRealmName(name)
@@ -450,12 +614,26 @@ function AutoLayer:ProcessMessage(
 				"Matched excluded request from player: '",
 				name,
 				"' in excluded channel: '",
-				exclusiveChannelMatch,
+				channelBaseName,
 				"' from list of excluded channels: '",
 				AutoLayer:GetFilteredChannels(),
 				"'"
 			)
 			return
+		end
+	end
+
+	if addonTable.flavor == "bcc" then
+		if bccRequiresCompatibilityHandling and self.db.profile.layerSegments then
+			return
+		end
+
+		if bccMetadata and self.db.profile.layerSegments then
+			local playerZone = addonTable.currentLayerZone or self:GetLayerZone()
+			if playerZone ~= "0" and bccMetadata.scopeID ~= "0" and playerZone ~= bccMetadata.scopeID then
+				sendZoneMismatchNoticeOnce(name)
+				return
+			end
 		end
 	end
 
@@ -548,6 +726,20 @@ function AutoLayer:ProcessMessage(
 	-- since those do not exist on anniversary servers and where HasActiveSeason() is true
 	-- we can validate it like this for now.
 	local isSeasonal = C_Seasons.HasActiveSeason()
+	local shouldNotifyCompatibilityOnInvite = addonTable.flavor == "bcc"
+		and bccRequiresCompatibilityHandling
+		and bccShouldNotifyCompatibility
+
+	local function invitePlayer()
+		if shouldNotifyCompatibilityOnInvite then
+			queueCompatibilityNoticeForInvite(name)
+		end
+		if isSeasonal then
+			C_PartyInfo.InviteUnit(name_without_realm)
+		else
+			C_PartyInfo.InviteUnit(name)
+		end
+	end
 
 	---@diagnostic disable-next-line: undefined-global
 	if (GetNumGroupMembers() + #pendingPlayerInvites) <= max_group_size then
@@ -556,19 +748,9 @@ function AutoLayer:ProcessMessage(
 			self:DebugPrint(
 				"Auto-whisper is turned off or we can't provide a helpful whisper, delaying our invite by 500 miliseconds"
 			)
-			C_Timer.After(0.5, function()
-				if isSeasonal then
-					C_PartyInfo.InviteUnit(name_without_realm)
-				else
-					C_PartyInfo.InviteUnit(name)
-				end
-			end)
+			C_Timer.After(0.5, invitePlayer)
 		else
-			if isSeasonal then
-				C_PartyInfo.InviteUnit(name_without_realm)
-			else
-				C_PartyInfo.InviteUnit(name)
-			end
+			invitePlayer()
 		end
 	else
 		self:DebugPrint("Group is already full (", GetNumGroupMembers(), "in group +", #pendingPlayerInvites, "pending invites). Cannot invite", name_without_realm)
@@ -577,20 +759,24 @@ function AutoLayer:ProcessMessage(
 	table.insert(recentLayerRequests, { name = name_without_realm, time = time() })
 	self:DebugPrint("Added", name_without_realm, "to list of recent layer requests")
 
-	-- check if group is full
+	-- Check if group is full
 	if self.db.profile.autokick and GetNumGroupMembers() == max_group_size then
-		self:DebugPrint("Group is full, kicking")
-
-		-- kick last member of raid
-		local lastMember = GetRaidRosterInfo(GetNumGroupMembers())
-		table.insert(kicked_player_queue, lastMember)
-
+		local candidate = self:SelectKickCandidate()
+		if candidate then
+			self:DebugPrint("Group is full, queueing", candidate, "for manual kick")
+			queueKickCandidate(candidate)
+		end
 		return
 	end
 end
 
 ---@diagnostic disable-next-line: inject-field
 function AutoLayer:ProcessSystemMessages(_, SystemMessages)
+	if SystemMessages == ERR_GROUP_DISBANDED or SystemMessages == ERR_LEFT_GROUP_YOU then
+		clearGroupInviteTimes()
+	elseif SystemMessages:match("^" .. ERR_LEFT_GROUP_S:format("(.+)")) then
+		clearGroupInviteTimes()
+	end
 	if not self.db.profile.enabled then
 		return
 	end
@@ -610,14 +796,18 @@ function AutoLayer:ProcessSystemMessages(_, SystemMessages)
 				break -- Found the player, no need to continue checking
 			end
 		end
-		-- Player accepted invite, remove from pending invites
+		-- Player accepted invite, transfer its timestamp and remove it from pending invites.
+		local inviteTimestamp = time()
 		for i, entry in ipairs(pendingPlayerInvites) do
 			if entry.name == playerNameWithoutRealm then
+				inviteTimestamp = entry.time or inviteTimestamp
 				self:DebugPrint("Removing ", playerNameWithoutRealm, " from pending invites, reason: accepted invite")
 				table.remove(pendingPlayerInvites, i)
 				break -- Found the player, no need to continue checking
 			end
 		end
+		groupInviteTimes[normalizeCharacterName(playerNameWithoutRealm)] = inviteTimestamp
+		deliverPendingCompatibilityNotice(characterName)
 		-- Ensure group loot is set as desired
 		if self.db.profile.overrideLootSettings and UnitIsGroupLeader("player") then
 			local lootMethod, _, _ = C_PartyInfo.GetLootMethod()
@@ -632,6 +822,14 @@ function AutoLayer:ProcessSystemMessages(_, SystemMessages)
 				SetLootThreshold(self.db.profile.lootThreshold)
 			end
 		end
+	end
+
+	characterName = SystemMessages:match("^" .. ERR_RAID_MEMBER_ADDED:format("(.+)"))
+	-- X joins the raid
+	if characterName then
+		local playerNameWithoutRealm = removeRealmName(characterName)
+		self:DebugPrint("ERR_RAID_MEMBER_ADDED", playerNameWithoutRealm, "found !")
+		deliverPendingCompatibilityNotice(characterName)
 	end
 
 	characterName = SystemMessages:match("^" .. ERR_DECLINE_GROUP_S:format("(.+)"))
@@ -651,6 +849,7 @@ function AutoLayer:ProcessSystemMessages(_, SystemMessages)
 				break -- Found the player, no need to continue checking
 			end
 		end
+		pendingCompatibilityNotices[normalizeCharacterName(playerNameWithoutRealm)] = nil
 	end
 
 	characterName = SystemMessages:match("^" .. ERR_INVITE_PLAYER_S:format("(.+)"))
@@ -716,12 +915,13 @@ function AutoLayer:HandleAutoKick()
 		return
 	end
 
-	if self.db.profile.autokick and #kicked_player_queue >= 0 then
+	if self.db.profile.autokick and #kicked_player_queue > 0 then
 		local name = table.remove(kicked_player_queue, 1)
 
 		if name == nil then
 			return
 		end
+		queuedKickNames[normalizeCharacterName(name)] = nil
 
 		if not UnitInRaid(name) and not UnitInParty(name) then
 			return
@@ -738,6 +938,12 @@ function AutoLayer:ProcessRosterUpdate()
 end
 
 function AutoLayer:ProcessZoneChange()
+	if addonTable.flavor == "bcc" then
+		addonTable.currentLayerZone = self:GetLayerZone()
+		self:DebugPrint("Current layer zone set to:", addonTable.currentLayerZone)
+		return
+	end
+
 	if self.db.profile.layerSegments then
 		local layer_segment = self:GetLayerSegment()
 		
@@ -753,8 +959,65 @@ function AutoLayer:ProcessZoneChange()
 		end
 	end
 end
+local LeaveParty = C_PartyInfo and C_PartyInfo.LeaveParty or LeaveParty
+
+local function findGroupLeaderUnit()
+	local unitPrefix = IsInRaid() and "raid" or "party"
+	for i = 1, GetNumGroupMembers() do
+		local unitID = unitPrefix .. i
+		if UnitIsGroupLeader(unitID) then
+			return unitID
+		end
+	end
+end
 
 function AutoLayer:ProcessGroupJoined()
+	if addonTable.flavor == "bcc" then
+		if not self.db.profile.layerSegments or UnitIsGroupLeader("player") then
+			return
+		end
+
+		local pendingLayerHop = addonTable.pendingLayerHop
+		if pendingLayerHop and pendingLayerHop.sentAt + 300 < time() then
+			addonTable.pendingLayerHop = nil
+			pendingLayerHop = nil
+		end
+
+		if not pendingLayerHop and not self.db.profile.showLayerWarning then
+			return
+		end
+
+		self:DebugPrint("Group joined, comparing layer zones with leader...")
+		C_Timer.After(2, function()
+			local activePendingHop = pendingLayerHop and addonTable.pendingLayerHop == pendingLayerHop
+			local playerZone, leaderZone = AutoLayer:CompareLayerZones()
+			local leaderUnit = findGroupLeaderUnit()
+
+			if activePendingHop and playerZone and leaderZone and playerZone ~= leaderZone then
+				LeaveParty()
+				addonTable.pendingLayerHop = nil
+				if leaderUnit then
+					sendCompatibilityNoticeOnce(UnitName(leaderUnit))
+				end
+				return
+			end
+
+			if activePendingHop and playerZone and leaderZone then
+				addonTable.pendingLayerHop = nil
+				return
+			end
+
+			if self.db.profile.showLayerWarning and leaderUnit then
+				local currentZone = AutoLayer:GetLayerZone()
+				local currentLeaderZone = AutoLayer:GetLayerZone(leaderUnit)
+				self:Print("|cffffff00WARNING:|r You are in " .. AutoLayer:GetLayerZoneName(currentZone) ..
+					", while the party leader is in " .. AutoLayer:GetLayerZoneName(currentLeaderZone) ..
+					". You will most likely not layer correctly. You can leave the party and try to layer again.")
+			end
+		end)
+		return
+	end
+
 	if self.db.profile.layerSegments and self.db.profile.showLayerWarning and not UnitIsGroupLeader("player") then
 		self:DebugPrint("Group joined, comparing layer segments with leader...")
 		-- Grant the game a little bit of time to process the group join and update any relevant information before we compare segments

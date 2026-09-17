@@ -1,20 +1,19 @@
-lightweight tag cc9075fbd6313092ecb47501772dc119a9fd141f 1.9.4-release
-Author:	GitHub <noreply@github.com>
-Date:	Fri Aug 21 14:37:30 2026 +0200
+tag 7e24f53d44530254fc18228acb6748228ad109a9 1.9.7-release
+Author:	raizo <admin@raizo.dev>
+Date:	Tue Sep 15 19:28:34 2026 +0200
 
-commit 390f191c5fc143d2271975fe3010eaf2396e349c
-Author: darkjacky <jackykoning@icloud.com>
-Date:   Fri Aug 21 01:20:33 2026 +0200
+Release 1.9.7
+-----BEGIN PGP SIGNATURE-----
 
-    Fix LeaveParty for TBC classic
-    
-    C_PartyInfo.LeaveParty does not exist on TBC Classic Anniversary. This simply uses a lua check so it works on every client.
+iHUEABYKAB0WIQQir/HAQ4rwTFWdng+Ci+YZGON9PgUCaqmAQgAKCRCCi+YZGON9
+PraCAP0RO/Ol9T9XDPfCaDfRcZULU83OOfMOhKPk1Oky7PTkugEAmPOPUr2fbwu/
+bSS7EgK2ynnBCV5WiuGfOWGcEkSkrgY=
+=aW4b
+-----END PGP SIGNATURE-----
 
-commit 390f191c5fc143d2271975fe3010eaf2396e349c
-Author: darkjacky <jackykoning@icloud.com>
-Date:   Fri Aug 21 01:20:33 2026 +0200
+commit 7c77955e11bc4ad37dc40ea2519b3df12b8aa49b
+Author: raizo <admin@raizo.dev>
+Date:   Tue Sep 15 18:22:32 2026 +0200
 
-    Fix LeaveParty for TBC classic
-    
-    C_PartyInfo.LeaveParty does not exist on TBC Classic Anniversary. This simply uses a lua check so it works on every client.
+    release: 1.9.7
 
